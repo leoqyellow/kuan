@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>酷安话题瀑布流</title>
+  <link rel="stylesheet" href="./styles.css?v=20260415g">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1 class="hero-title">酷安话题</h1>
+      <p class="hero-subtitle">基于抓包接口字段还原的话题瀑布流</p>
+
+      <div id="tagBar" class="tag-bar"></div>
+
+      <form id="searchForm" class="search-form">
+        <input id="searchInput" type="search" placeholder="手动搜索其他关键词..." autocomplete="off">
+        <button type="submit">搜索</button>
+      </form>
+    </header>
+
+    <section class="toolbar">
+      <div class="toolbar-left">
+        <p id="stats" class="stats">加载中...</p>
+        <p id="liveState" class="live-state">实时刷新：初始化中...</p>
+        <p id="dataStamp" class="data-stamp">数据版本：未知</p>
+      </div>
+      <div class="toolbar-actions">
+        <select id="sortSelect" class="sort-select" aria-label="时间排序">
+          <option value="latest">按时间：最新</option>
+          <option value="oldest">按时间：最早</option>
+        </select>
+        <button id="refreshNowBtn" class="secondary-btn" type="button">立即刷新</button>
+        <button id="toggleLiveBtn" class="secondary-btn" type="button">暂停自动刷新</button>
+        <button id="resetBtn" class="reset-btn" type="button">重置筛选</button>
+      </div>
+    </section>
+
+    <section id="feedGrid" class="feed-grid" aria-live="polite"></section>
+
+    <div class="load-more-wrap">
+      <button id="loadMoreBtn" type="button">加载更多</button>
+    </div>
+  </main>
+
+  <section id="commentModal" class="comment-modal" aria-hidden="true">
+    <div class="comment-mask" data-close="1"></div>
+    <div class="comment-panel" role="dialog" aria-modal="true" aria-labelledby="commentTitle">
+      <header class="comment-header">
+        <h2 id="commentTitle">最新评论</h2>
+        <button id="closeCommentBtn" class="close-btn" type="button">关闭</button>
+      </header>
+      <div id="commentMeta" class="comment-meta"></div>
+      <div id="commentList" class="comment-list"></div>
+      <div class="load-more-wrap">
+        <button id="loadMoreCommentsBtn" class="secondary-btn" type="button">加载更多评论</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="postModal" class="comment-modal" aria-hidden="true">
+    <div class="comment-mask" data-close-post="1"></div>
+    <div class="comment-panel" role="dialog" aria-modal="true" aria-labelledby="postTitle">
+      <header class="comment-header">
+        <h2 id="postTitle">帖子详情</h2>
+        <button id="closePostBtn" class="close-btn" type="button">关闭</button>
+      </header>
+      <div id="postMeta" class="comment-meta"></div>
+      <div id="postBody" class="comment-list"></div>
+    </div>
+  </section>
+
+  <section id="imageModal" class="comment-modal" aria-hidden="true">
+    <div class="comment-mask" data-close-image="1"></div>
+    <div class="image-panel">
+      <img id="imageViewer" src="" alt="大图预览">
+    </div>
+  </section>
+
+  <script src="./app.js?v=20260415g"></script>
+</body>
+</html>

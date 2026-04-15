@@ -1,0 +1,38 @@
+services:
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8010:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+      - ./deploy/nginx.docker.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - sync
+
+  api:
+    image: python:3.11-slim
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      HAR_FILE: sdktmp.hubcloud.com.cn_2026_04_14_23_02_20.har
+    command:
+      - /bin/sh
+      - -lc
+      - python scripts/live_api.py --har "$$HAR_FILE" --specs data/live_specs.json --cache data/feeds.json --port 8090 --timeout 12
+    volumes:
+      - ./:/app
+
+  sync:
+    image: python:3.11-slim
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      HAR_FILE: sdktmp.hubcloud.com.cn_2026_04_14_23_02_20.har
+    command:
+      - /bin/sh
+      - -lc
+      - python scripts/extract_feeds.py "$$HAR_FILE" && python scripts/live_sync.py --har "$$HAR_FILE" --interval 30 --timeout 15 --comments-limit 60 --comment-rows 20 --comment-pages 5 --detail-limit 60 --topics-max 12 --output data
+    volumes:
+      - ./:/app
